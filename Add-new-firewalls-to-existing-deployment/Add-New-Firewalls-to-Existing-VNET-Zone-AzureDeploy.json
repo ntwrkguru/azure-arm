@@ -4,14 +4,14 @@
     "parameters": {
         "virtualNetworkExistingRGName": {
             "defaultValue": "",
-            "type": "String",
+            "type": "string",
             "metadata": {
                 "description": "Name of resource group of EXISTING VNET"
             }
         },
         "virtualNetworkName": {
             "defaultValue": "",
-            "type": "String",
+            "type": "string",
             "metadata": {
                 "description": "Name of the EXISTING Virtual Network (VNET)"
             }
@@ -22,49 +22,49 @@
                 "True",
                 "False"
             ],
-            "type": "String",
+            "type": "string",
             "metadata": {
                 "description": "Specifies if bootstrap storage account will be used"
             }
         },
         "BootstrapStorageAccount": {
             "defaultValue": "",
-            "type": "String",
+            "type": "string",
             "metadata": {
                 "description": "Storage account hosting the bootstrap files"
             }
         },
         "StorageAccountAccessKey": {
             "defaultValue": "",
-            "type": "String",
+            "type": "string",
             "metadata": {
                 "description": "Authentication key to access the storage account"
             }
         },
         "StorageAccountFileShare": {
             "defaultValue": "",
-            "type": "String",
+            "type": "string",
             "metadata": {
                 "description": "The file share in the storage account where the bootstrap files are located"
             }
         },
         "StorageAccountFileShareDirectory": {
             "defaultValue": "",
-            "type": "String",
+            "type": "string",
             "metadata": {
                 "description": "The subdirectory hosting the bootstrap files. Only required if hosting multiple bootstrap directories on the same share"
             }
         },
         "availabilityZone": {
             "defaultValue": "",
-            "type": "String",
+            "type": "string",
             "metadata": {
                 "description": "Add firewall to Availability Zone [1,2]"
             }
         },
         "vmName": {
             "defaultValue": "",
-            "type": "String",
+            "type": "string",
             "metadata": {
                 "description": "Name of VM-Series FW in the Azure portal"
             }
@@ -79,7 +79,7 @@
                 "Standard_D4_v2",
                 "Standard_D5_v2"
             ],
-            "type": "String",
+            "type": "string",
             "metadata": {
                 "description": "Azure VM size for VM-Series"
             }
@@ -96,7 +96,7 @@
                 "9.1.0",
                 "latest"
             ],
-            "type": "String",
+            "type": "string",
             "metadata": {
                 "description": "PAN OS Version"
             }
@@ -108,7 +108,7 @@
                 "bundle1",
                 "bundle2"
             ],
-            "type": "String",
+            "type": "string",
             "metadata": {
                 "description": "Firewall License Model"
             }
@@ -119,44 +119,44 @@
                 "Standard_LRS",
                 "Premium_LRS"
             ],
-            "type": "String"
+            "type": "string"
         },
         "managementSubnetName": {
             "defaultValue": "Management",
-            "type": "String",
+            "type": "string",
             "metadata": {
                 "description": "EXISTING Subnet for Management"
             }
         },
         "untrustSubnetName": {
             "defaultValue": "Untrust",
-            "type": "String",
+            "type": "string",
             "metadata": {
                 "description": "EXISTING Subnet for Untrust"
             }
         },
         "trustSubnetName": {
             "defaultValue": "Trust",
-            "type": "String",
+            "type": "string",
             "metadata": {
                 "description": "EXISTING Subnet for Trust"
             }
         },
         "Username": {
-            "type": "String",
+            "type": "string",
             "metadata": {
                 "description": "Username of the administrator account of VM-Series"
             }
         },
         "Password": {
             "defaultValue": "",
-            "type": "SecureString",
+            "type": "securestring",
             "metadata": {
                 "description": "Password for the administrator account of VM-Series"
             }
         },
         "publicIPAddressName": {
-            "type": "String",
+            "type": "string",
             "metadata": {
                 "description": "Name of FW1 MGMT Public Address"
             }
