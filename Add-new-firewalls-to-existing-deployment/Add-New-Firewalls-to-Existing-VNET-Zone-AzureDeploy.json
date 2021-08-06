@@ -94,6 +94,9 @@
                 "9.0.4",
                 "9.0.6",
                 "9.1.0",
+                "9.1.9",
+                "10.0.6",
+                "10.1.0",
                 "latest"
             ],
             "type": "string",
@@ -114,7 +117,7 @@
             }
         },
         "disktype": {
-            "defaultValue": "",
+            "defaultValue": "Standard_LRS",
             "allowedValues": [
                 "Standard_LRS",
                 "Premium_LRS"
@@ -122,27 +125,28 @@
             "type": "string"
         },
         "managementSubnetName": {
-            "defaultValue": "Management",
+            "defaultValue": "",
             "type": "string",
             "metadata": {
                 "description": "EXISTING Subnet for Management"
             }
         },
         "untrustSubnetName": {
-            "defaultValue": "Untrust",
+            "defaultValue": "",
             "type": "string",
             "metadata": {
                 "description": "EXISTING Subnet for Untrust"
             }
         },
         "trustSubnetName": {
-            "defaultValue": "Trust",
+            "defaultValue": "",
             "type": "string",
             "metadata": {
                 "description": "EXISTING Subnet for Trust"
             }
         },
         "Username": {
+            "defaultValue": "",
             "type": "string",
             "metadata": {
                 "description": "Username of the administrator account of VM-Series"
@@ -156,28 +160,40 @@
             }
         },
         "publicIPAddressName": {
+            "defaultValue": "",
             "type": "string",
             "metadata": {
                 "description": "Name of FW1 MGMT Public Address"
             }
+        },
+        "firewallCount": {
+            "defaultValue": "2",
+            "type": "int",
+            "metadata": {
+                "description": "Number of firewalls to deploy"
+            }
         }
-    },
-    "variables": {
-        "customDataField": "[concat('storage-account=', parameters('BootstrapStorageAccount'), ',access-key=', parameters('StorageAccountAccessKey'), ',file-share=', parameters('StorageAccountFileShare'),',share-directory=', parameters('StorageAccountFileShareDirectory'))]",
-        "vnetID": "[resourceId(parameters('virtualNetworkExistingRGName'), 'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
-        "subnet0Ref": "[concat(variables('vnetID'),'/subnets/',parameters('managementSubnetName'))]",
-        "subnet1Ref": "[concat(variables('vnetID'),'/subnets/',parameters('untrustSubnetName'))]",
-        "subnet2Ref": "[concat(variables('vnetID'),'/subnets/',parameters('trustSubnetName'))]",
-        "vmName": "[concat(parameters('vmName'),'-Az',parameters('availabilityZone'))]",
-        "fwManagementNic": "[concat(variables('vmName'), 'Management')]",
-        "fwUntrustNic": "[concat('INT-',variables('vmName'), '-Untrust')]",
-        "fwTrustNic": "[concat('INT-',variables('vmName'), '-Trust')]"
     },
     "resources": [
         {
             "type": "Microsoft.Network/publicIPAddresses",
             "apiVersion": "2017-08-01",
-            "name": "[parameters('publicIPAddressName')]",
+            "name": "[parameters('fw1PublicIPAddressName')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [],
+            "sku": {
+                "name": "Standard"
+            },
+            "properties": {
+                "publicIPAllocationMethod": "Static",
+                "idleTimeoutInMinutes": 4
+            },
+            "resources": []
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2017-08-01",
+            "name": "[parameters('fw2PublicIPAddressName')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [],
             "sku": {
@@ -200,11 +216,36 @@
             "properties": {
                 "ipConfigurations": [
                     {
-                        "name": "ipconfig-mgmt",
+                        "name": "fw1-ipconfig-mgmt",
                         "properties": {
                             "privateIPAllocationMethod": "Dynamic",
                             "publicIPAddress": {
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddressName'))]"
+                                "id": "[resourceId('Microsoft.Network/fw1PublicIPAddresses', parameters('fw1PublicIPAddressName'))]"
+                            },
+                            "subnet": {
+                                "id": "[variables('subnet0Ref')]"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2015-06-15",
+            "name": "[variables('fwManagementNic')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[concat('Microsoft.Network/publicIPAddresses/', parameters('publicIPAddressName'))]"
+            ],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "fw2-ipconfig-mgmt",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/fw2PublicIPAddresses', parameters('fw2PublicIPAddressName'))]"
                             },
                             "subnet": {
                                 "id": "[variables('subnet0Ref')]"
@@ -318,6 +359,10 @@
                         }
                     ]
                 }
+            },
+            "copy": {
+                "name": "firewallCount",
+                "count": "[parameters(firewallCount)]"
             }
         }
     ]

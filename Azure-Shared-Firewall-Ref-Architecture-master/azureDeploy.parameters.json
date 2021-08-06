@@ -15,7 +15,7 @@
       "value": "new"
     },
     "virtualNetworkName": {
-      "value": "NET-Demo"
+      "value": "ssteiner-vwan-poc-sec"
     },
     "virtualNetworkAddressPrefix": {
       "value": "10.0.0.0/16"
