@@ -1,0 +1,20 @@
+{
+    "variables": {
+        "virtualNetworkExistingRGName": "ssteiner-vwan-poc",
+        "virtualNetworkName": "ssteiner-vwan-poc-sec",
+        "bootstrapFirewall": "False",
+        "vmName": "ssteiner-vwan-poc-fw1",
+        "vmSize": "Standard_DS3_v2",
+        "imageVersion": "10.0.6",
+        "imageSku": "payg",
+        "disktype": "Standard_LRS",
+        "managementSubnetName": "ssteiner-vwan-poc-sec-mgmt",
+        "untrustSubnetName": "ssteiner-vwan-poc-outside",
+        "trustSubnetName": "ssteiner-vwan-poc-inside",
+        "Username": "paloalto",
+        "Password": "Pal0Alt0123!",
+        "fw1PublicIPAddressName": "ssteiner-vwan-poc-fw1-mgt",
+        "fw2PublicIPAddressName": "ssteiner-vwan-poc-fw1-mgt",
+        "fireallCount": "2"
+    }
+}
